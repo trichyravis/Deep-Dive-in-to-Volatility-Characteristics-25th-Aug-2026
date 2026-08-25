@@ -15,13 +15,13 @@ from style import MOUNTAIN_CSS
 st.set_page_config(page_title="Volatility Characteristics Laboratory", page_icon="▲", layout="wide")
 st.markdown(MOUNTAIN_CSS, unsafe_allow_html=True)
 
-GOLD, BLUE, SKY, GREEN, RED, MUTED = "#FFD700", "#1a4480", "#ADD8E6", "#35c96f", "#ff4b5c", "#b8c7dc"
+GOLD, BLUE, SKY, GREEN, RED, MUTED = "#d89a2b", "#842d45", "#147d7a", "#2d7d68", "#bd4b4b", "#7b858f"
 PLOT = dict(
-    paper_bgcolor="#112240", plot_bgcolor="#112240", font_color="#e6f1ff",
+    paper_bgcolor="#fffdf8", plot_bgcolor="#fffdf8", font_color="#263442",
     font_family="Source Sans 3", margin=dict(l=40, r=24, t=60, b=40),
-    xaxis=dict(gridcolor="rgba(136,146,176,.15)"),
-    yaxis=dict(gridcolor="rgba(136,146,176,.15)"),
-    hoverlabel=dict(bgcolor="#0a192f"),
+    xaxis=dict(gridcolor="rgba(117,105,91,.14)", zerolinecolor="rgba(117,105,91,.22)"),
+    yaxis=dict(gridcolor="rgba(117,105,91,.14)", zerolinecolor="rgba(117,105,91,.22)"),
+    hoverlabel=dict(bgcolor="#354957", font_color="#ffffff"),
 )
 
 
@@ -244,14 +244,14 @@ with tabs[6]:
         vol_panel = common.rolling(rolling).std()*np.sqrt(factor)
         norm_vol = vol_panel.divide(vol_panel.median())
         fig=go.Figure()
-        palette=[GOLD,SKY,GREEN,RED,"#c792ea","#ff9f43","#4dd0e1","#f78fb3"]
+        palette=[BLUE,SKY,GOLD,RED,"#6f63a8","#cc7a39","#4f8e63","#b45f83"]
         for i,name in enumerate(norm_vol):
             fig.add_trace(go.Scatter(x=norm_vol.index,y=norm_vol[name],name=name,line=dict(color=palette[i%len(palette)],width=2 if name==primary else 1.35)))
         fig.add_hline(y=1,line_dash="dash",line_color=MUTED)
         fig.update_layout(title="Rolling volatility relative to each market's median",height=500,yaxis_title="Volatility / own median",hovermode="x unified",**PLOT)
         st.plotly_chart(fig,width="stretch")
         corr=common.corr(min_periods=60)
-        heat=go.Figure(go.Heatmap(z=corr.values,x=corr.columns,y=corr.index,zmin=-1,zmax=1,zmid=0,colorscale=[[0,"#e41d3d"],[.5,"#f4f6fa"],[1,"#1a4480"]],text=np.round(corr.values,2),texttemplate="%{text}"))
+        heat=go.Figure(go.Heatmap(z=corr.values,x=corr.columns,y=corr.index,zmin=-1,zmax=1,zmid=0,colorscale=[[0,"#a73d4d"],[.5,"#fffaf0"],[1,"#147d7a"]],text=np.round(corr.values,2),texttemplate="%{text}"))
         heat.update_layout(title="Full-sample return correlation",height=max(430,70*len(corr)),**PLOT)
         st.plotly_chart(heat,width="stretch")
         st.dataframe(metric_table(common,factor).style.format({"Annualised volatility (%)":"{:.2f}","Skewness":"{:.2f}","Excess kurtosis":"{:.2f}","Worst return (%)":"{:.2f}","Best return (%)":"{:.2f}"}),hide_index=True,width="stretch")
