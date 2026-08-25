@@ -15,7 +15,7 @@ from style import MOUNTAIN_CSS
 st.set_page_config(page_title="Volatility Characteristics Laboratory", page_icon="▲", layout="wide")
 st.markdown(MOUNTAIN_CSS, unsafe_allow_html=True)
 
-GOLD, BLUE, SKY, GREEN, RED, MUTED = "#d89a2b", "#842d45", "#147d7a", "#2d7d68", "#bd4b4b", "#7b858f"
+GOLD, BLUE, SKY, GREEN, RED, MUTED = "#ffd400", "#12345b", "#2877ad", "#2d7d68", "#bd4b4b", "#738295"
 PLOT = dict(
     paper_bgcolor="#fffdf8", plot_bgcolor="#fffdf8", font_color="#263442",
     font_family="Source Sans 3", margin=dict(l=40, r=24, t=60, b=40),
@@ -61,7 +61,7 @@ def metric_table(series, factor):
 
 
 def callout(title, body):
-    st.markdown(f'<div class="insight"><b style="color:{GOLD}">{title}</b><br>{body}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="insight"><b style="color:{BLUE}">{title}</b><br>{body}</div>', unsafe_allow_html=True)
 
 
 st.markdown('''
@@ -251,7 +251,7 @@ with tabs[6]:
         fig.update_layout(title="Rolling volatility relative to each market's median",height=500,yaxis_title="Volatility / own median",hovermode="x unified",**PLOT)
         st.plotly_chart(fig,width="stretch")
         corr=common.corr(min_periods=60)
-        heat=go.Figure(go.Heatmap(z=corr.values,x=corr.columns,y=corr.index,zmin=-1,zmax=1,zmid=0,colorscale=[[0,"#a73d4d"],[.5,"#fffaf0"],[1,"#147d7a"]],text=np.round(corr.values,2),texttemplate="%{text}"))
+        heat=go.Figure(go.Heatmap(z=corr.values,x=corr.columns,y=corr.index,zmin=-1,zmax=1,zmid=0,colorscale=[[0,"#bd4b4b"],[.5,"#f8fbff"],[1,"#174f82"]],text=np.round(corr.values,2),texttemplate="%{text}"))
         heat.update_layout(title="Full-sample return correlation",height=max(430,70*len(corr)),**PLOT)
         st.plotly_chart(heat,width="stretch")
         st.dataframe(metric_table(common,factor).style.format({"Annualised volatility (%)":"{:.2f}","Skewness":"{:.2f}","Excess kurtosis":"{:.2f}","Worst return (%)":"{:.2f}","Best return (%)":"{:.2f}"}),hide_index=True,width="stretch")
